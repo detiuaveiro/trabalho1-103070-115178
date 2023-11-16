@@ -653,21 +653,21 @@ void ImageBlur(Image img, int dx, int dy) { ///
   //ciclo para aplicar o filtro
   for (int i = 0; i < img->width; i++) {
     for (int j = 0; j < img->height; j++) {
-      int sum = 0;
-      int count = 0;
+      int sum_pixeis = 0;
+      int count_p = 0;
       //ciclo para percorrer os pixeis do filtro
       for (int x = i-dx; x <= i+dx; x++) {
         for (int y = j-dy; y <= j+dy; y++) {
           //verificar se o pixel está dentro da imagem
           if (ImageVayidPos(img, x, y)) {
             //somar o valor do pixel
-            sum += ImageGetPixel(img, x, y);
-            count++;
+            sum_pixeis += ImageGetPixel(img, x, y);
+            count_p++;
           }
         }
       }
       //atribuir o valor da média ao pixel
-      int media = sum / count;
+      int media = sum_pixeis / count_p;
       ImageSetPixel(img, i, j, media);
     }
   }
