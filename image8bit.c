@@ -11,8 +11,8 @@
 
 // Student authors (fill in below):
 // NMec:  Name:
-// 
-// 
+// 103070 Eduardo Lopes
+// 115178 Roberto Fontoura
 // 
 // Date:
 //
@@ -172,6 +172,27 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
   assert (height >= 0);
   assert (0 < maxval && maxval <= PixMax);
   // Insert your code here!
+  Image img = (Image*) malloc(sizeof(Image));
+
+  //verificar se a alocação falhou
+  if(!check(img != NULL, "Memory allocation failed")){
+    free(img);
+    return NULL;
+  }
+
+  //atribuir os valores ao novo objeto
+  img->width = width;
+  img->height = height;
+  img->maxval = maxval;
+  img->pixel = (uint8*)malloc(sizeof(uint8) * width * height);
+
+  //verificar se a alocação falhou
+  if(!check(img->pixel != NULL, "Memory allocation failed")){
+    free(img->pixel);
+    return NULL;
+  }
+  
+  return img;
 }
 
 /// Destroy the image pointed to by (*imgp).
