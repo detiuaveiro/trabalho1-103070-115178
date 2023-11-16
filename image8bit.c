@@ -172,7 +172,7 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
   assert (height >= 0);
   assert (0 < maxval && maxval <= PixMax);
   // Insert your code here!
-  Image img = (Image*) malloc(sizeof(Image));
+  Image img = (Image*)malloc(sizeof(Image));
 
   //verificar se a alocação falhou
   if(!check(img != NULL, "Memory allocation failed")){
@@ -364,6 +364,8 @@ int ImageValidRect(Image img, int x, int y, int w, int h) { ///
 static inline int G(Image img, int x, int y) {
   int index;
   // Insert your code here!
+  //calcular o indice do pixel
+  index = y * img->width + x;
   assert (0 <= index && index < img->width*img->height);
   return index;
 }
@@ -399,6 +401,11 @@ void ImageSetPixel(Image img, int x, int y, uint8 level) { ///
 void ImageNegative(Image img) { ///
   assert (img != NULL);
   // Insert your code here!
+  //ciclo para inverter os pixeis
+  for(int i = 0; i < img->width*img->height; i++){
+    //sutrair o valor do pixel ao maximo valor de cinzento
+    img->pixel[i] = img->maxval - img->pixel[i];
+  }
 }
 
 /// Apply threshold to image.
@@ -407,6 +414,15 @@ void ImageNegative(Image img) { ///
 void ImageThreshold(Image img, uint8 thr) { ///
   assert (img != NULL);
   // Insert your code here!
+  //ciclo para aplicar o threshold
+  for(int i = 0; i < img->width*img->height; i++){
+    if(img->pixel[i] < thr)
+      //tornar o pixel preto
+      img->pixel[i] = 0;
+    else
+      //tornar o pixel branco
+      img->pixel[i] = img->maxval;
+  }
 }
 
 /// Brighten image by a factor.
@@ -417,6 +433,15 @@ void ImageBrighten(Image img, double factor) { ///
   assert (img != NULL);
   // ? assert (factor >= 0.0);
   // Insert your code here!
+  //ciclo para aplicar o brilho
+  for(int i = 0; i < img->width*img->height; i++){
+    //multiplicar o pixel pelo fator mais uma constante para arredondar
+    img->pixel[i] *= factor + 0.5;
+    
+    if(img->pixel[i] > img->maxval)
+      //repor o valor do pixel para o maximo valor de cinzento
+      img->pixel[i] = img->maxval;
+  }
 }
 
 
