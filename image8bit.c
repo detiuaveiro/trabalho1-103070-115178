@@ -322,6 +322,7 @@ int ImageMaxval(Image img) { ///
 void ImageStats(Image img, uint8* min, uint8* max) { ///
   assert (img != NULL);
   // Insert your code here!
+  //inicializar o minimo e o maximo com o primeiro pixel
   *min = img->pixel[0];
   *max = img->pixel[0];
 
@@ -346,6 +347,8 @@ int ImageValidPos(Image img, int x, int y) { ///
 int ImageValidRect(Image img, int x, int y, int w, int h) { ///
   assert (img != NULL);
   // Insert your code here!
+  //verificar se os vertices do retangulo estão dentro da imagem
+  return ImageValidPos(img, x, y) && ImageValidPos(img, w, h) && ImageValidPos(img, w, y) && ImageValidPos(img, x, h);  
 }
 
 /// Pixel get & set operations
