@@ -191,6 +191,8 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
     free(img->pixel);
     return NULL;
   }
+
+  PIXMEM += (unsigned long)(width*height);  // count pixel memory accesses
   
   return img;
 }
@@ -203,6 +205,11 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
 void ImageDestroy(Image* imgp) { ///
   assert (imgp != NULL);
   // Insert your code here!
+  if(*imgp != NULL){
+    free((*imgp)->pixel);
+    free(*imgp);
+    *imgp = NULL;
+  }
 }
 
 
