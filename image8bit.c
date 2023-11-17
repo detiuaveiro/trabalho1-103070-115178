@@ -672,7 +672,7 @@ void ImageBlur(Image img, int dx, int dy) { ///
         }
       }
       //atribuir o valor da média ao pixel
-      int media = sum_pixeis / count_p;
+      int media = (sum_pixeis + count_p/2) / count_p;
       ImageSetPixel(img, x, y, media);
     }
   }
