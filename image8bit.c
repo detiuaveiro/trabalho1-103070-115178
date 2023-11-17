@@ -655,8 +655,8 @@ int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) { ///
 /// The image is changed in-place.
 void ImageBlur(Image img, int dx, int dy) { ///
   // Insert your code here!
+  /* Primeira implementação (versão não otimizada)
   //criar uma imagem auxiliar para não alterar a imagem original
-  // so para fix
   Image img_aux = ImageCreate(img->width+1, img->height+1, img->maxval);
   ImagePaste(img_aux,0, 0, img);
   //ciclo para aplicar o filtro
@@ -677,6 +677,58 @@ void ImageBlur(Image img, int dx, int dy) { ///
       }
       //atribuir o valor da média ao pixel
       int media = (sum_pixeis + count_p/2) / count_p;
+      ImageSetPixel(img, x, y, media);
+    }
+  }
+  */
+
+  //segunda implementação (versão otimizada)
+  //criar um array para guardar o vaalor da soma dos pixeis
+  int* tabela = (int*)malloc(sizeof(int) * img->width * img->height);
+
+  //verificar se a alocação falhou
+  if (!check(tabela != NULL, "Memory allocation failed")) {
+    free(tabela);
+    return;
+  }
+
+  //ciclo para calcular a soma dos pixeis
+  for (int x = 0; x < img->width; x++) {
+    for (int y = 0; y < img->height; y++) {
+      //declarar as variaveis para guardar os valores dos pixeis da matriz
+      uint8 matriz_esq, matriz_cima, matriz_diagonal;
+
+      if (x > 0) {
+        matriz_esq = ImageGetPixel(img, x-1, y);
+      } 
+      else {
+        matriz_esq = 0;
+      }
+      if (y > 0) {
+        matriz_cima = ImageGetPixel(img, x, y-1);
+      } 
+      else {
+        matriz_cima = 0;
+      }
+      if (x > 0 && y > 0) {
+        matriz_diagonal = ImageGetPixel(img, x-1, y-1);
+      } 
+      else {
+        matriz_diagonal = 0;
+      }
+      //calcular a soma dos pixeis
+      tabela[G(img, x, y)] = ImageGetPixel(img, x, y) + matriz_esq + matriz_cima - matriz_diagonal;
+    }
+  }
+
+  //ciclo para aplicar o filtro
+  for (int x = 0; x < img->width; x++) {
+    for (int y = 0; y < img->height; y++) {
+      //calcular a soma dos pixeis
+      int sum_pixeis = tabela[G(img, x+dx, y+dy)] - tabela[G(img, x-dx-1, y+dy)] - tabela[G(img, x+dx, y-dy-1)] + tabela[G(img, x-dx-1, y-dy-1)];
+      //calcular a média dos pixeis
+      int media = (sum_pixeis + (2*dx+1)*(2*dy+1)/2) / ((2*dx+1)*(2*dy+1));
+      //atribuir o valor da média ao pixel
       ImageSetPixel(img, x, y, media);
     }
   }
