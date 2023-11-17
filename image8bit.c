@@ -682,7 +682,7 @@ void ImageBlur(Image img, int dx, int dy) { ///
     }
   }
   */
-  
+  /*
   //segunda implementação (versão otimizada)
   //criar um array para guardar o vaalor da soma dos pixeis
   int *tabela = (int*)malloc(sizeof(uint8) * img->width * img->height);
@@ -744,6 +744,47 @@ void ImageBlur(Image img, int dx, int dy) { ///
       value_blur = tabela[G(img, x_fim, y_fim)] - value_esq - value_cima + value_diagonal;
       value_blur = (value_blur + count_p/2) / count_p;
       ImageSetPixel(img, x, y, value_blur);
+    }
+  }
+  */
+  assert(img!=NULL);
+  int *sumtable;
+  int blur, initial_x, initial_y, x_end, y_end, x_length, y_length, total;
+  sumtable = (int*) malloc(sizeof(uint8*)*img->width *img->height);
+  for (int x=0; x< img->width; x++){
+    for (int y=0; y<img->height; y++){
+      sumtable[G(img,x,y)]=ImageGetPixel(img, x, y);
+      if (x> 0 && y>0){
+        sumtable[G(img,x,y)]-=sumtable[G(img,x-1,y-1)];
+      }
+      if (x > 0){
+        sumtable[G(img,x,y)]+=sumtable[G(img,x-1,y)];
+      }
+      if (y > 0){
+        sumtable[G(img,x,y)]+=sumtable[G(img,x,y-1)];
+      }
+    }
+  }
+  for (int x=0; x< img->width; x++){
+    for (int y=0; y<img->height; y++){
+      initial_x=MAX(x-dx,0);
+      initial_y=MAX(y-dy,0);
+      x_end=MIN(x+dx, img->width-1);
+      y_end=MIN(y+dy, img->height-1);
+      x_length=x_end-initial_x+1;
+      y_length=y_end-initial_y+1;
+      total=x_length*y_length;
+      blur=sumtable[G(img, x_end, y_end)];
+      if (initial_x > 0 && initial_y > 0){
+        blur+=sumtable[G(img,initial_x-1,initial_y-1)];
+      }
+      if (initial_x > 0){
+        blur-=sumtable[G(img,initial_x-1,y_end)];
+      }
+      if (initial_y > 0){
+        blur-=sumtable[G(img,x_end,initial_y-1)];
+      }
+      ImageSetPixel(img, x, y, (blur + total/2)/total);
     }
   }
 }
