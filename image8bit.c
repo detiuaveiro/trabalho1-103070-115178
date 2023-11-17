@@ -656,7 +656,7 @@ int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) { ///
 /// The image is changed in-place.
 void ImageBlur(Image img, int dx, int dy) { ///
   // Insert your code here!
-  // Primeira implementação (versão não otimizada)
+  /* Primeira implementação (versão não otimizada)
   //criar uma imagem auxiliar para não alterar a imagem original
   Image img_aux = ImageCreate(img->width+1, img->height+1, img->maxval);
   ImagePaste(img_aux,0, 0, img);
@@ -681,8 +681,8 @@ void ImageBlur(Image img, int dx, int dy) { ///
       ImageSetPixel(img, x, y, media);
     }
   }
+  */
   
-  /*
   //segunda implementação (versão otimizada)
   //criar um array para guardar o valor da soma dos pixeis
   int *tabela;
@@ -731,7 +731,9 @@ void ImageBlur(Image img, int dx, int dy) { ///
       x_fim = MIN(img->width-1, x+dx);
       y_inicio = MAX(0, y-dy);
       y_fim = MIN(img->height-1, y+dy);
-      count_p = (x_fim - x_inicio + 1) * (y_fim - y_inicio + 1);
+      int x_length = x_fim - x_inicio + 1;
+      int y_length = y_fim - y_inicio + 1;
+      count_p = x_length * y_length;
 
       if (x_inicio > 0 && y_inicio > 0) {
         value_diagonal = tabela[G(img, x_inicio-1, y_inicio-1)];
@@ -749,6 +751,5 @@ void ImageBlur(Image img, int dx, int dy) { ///
       ImageSetPixel(img, x, y, value_blur);
     }
   }
-  */
 }
 
