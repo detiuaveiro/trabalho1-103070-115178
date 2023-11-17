@@ -682,7 +682,7 @@ void ImageBlur(Image img, int dx, int dy) { ///
     }
   }
   */
-  
+  /*
   //segunda implementação (versão otimizada)
   //criar um array para guardar o vaalor da soma dos pixeis
   int* tabela = (int*)malloc(sizeof(int) * img->width * img->height);
@@ -756,9 +756,37 @@ void ImageBlur(Image img, int dx, int dy) { ///
 
       //atribuir o valor da média ao pixel
       int sum_pixeis = tabela[G(img, x_fim, y_fim)] - value_esq - value_cima + value_diagonal;
-      sum_pixeis = (sum_pixeis + count_p/2) / count_p;
-      ImageSetPixel(img, x, y, sum_pixeis);
+      int media = (sum_pixeis + count_p/2) / count_p;
+      ImageSetPixel(img, x, y, media);
     }
+  }
+  */
+  int* valuesum;
+  int blurval, xstart, xend, ystart, yend, xlen, ylen, count;
+  valuesum = (uint8*) malloc(sizeof(uint8*) * img->height * img->width);
+  if(check(valuesum != NULL, "Failed memory allocation")){
+    for (int x = 0; x < img->width; x++){
+      for (int y = 0; y < img->height; y++){
+        valuesum[G(img, x, y)] = ImageGetPixel(img, x, y) + ((x > 0) ? valuesum[G(img, x-1, y)] : 0) + ((y > 0) ? valuesum[G(img, x, y-1)] : 0) - ((x > 0 && y > 0) ? valuesum[G(img, x-1, y-1)] : 0);
+      }
+    }
+    for (int x = 0; x < img->width; x++){
+      for (int y = 0; y < img->height; y++){
+        xstart = max(x - dx, 0);
+        ystart = max(y - dy, 0);
+        xend = min(x + dx, img->width-1);
+        yend = min(y + dy, img->height-1);
+        xlen = xend - xstart + 1;
+        ylen = yend - ystart + 1;
+        count = ylen * xlen;
+        blurval = valuesum[G(img, xend, yend)] - ((ystart > 0) ? valuesum[G(img, xend, ystart - 1)] : 0) - ((xstart > 0) ? valuesum[G(img, xstart - 1, yend)] : 0) + ((xstart > 0 && ystart > 0) ? valuesum[G(img, xstart - 1, ystart - 1)] : 0);
+        blurval = (blurval + count / 2)/count;
+        ImageSetPixel(img, x, y, blurval);
+      }
+    }
+  }
+  else {
+    free(valuesum);
   }
 }
 
