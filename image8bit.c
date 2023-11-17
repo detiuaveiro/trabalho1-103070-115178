@@ -656,7 +656,7 @@ int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) { ///
 /// The image is changed in-place.
 void ImageBlur(Image img, int dx, int dy) { ///
   // Insert your code here!
-  /* Primeira implementação (versão não otimizada)
+  // Primeira implementação (versão não otimizada)
   //criar uma imagem auxiliar para não alterar a imagem original
   Image img_aux = ImageCreate(img->width+1, img->height+1, img->maxval);
   ImagePaste(img_aux,0, 0, img);
@@ -681,8 +681,8 @@ void ImageBlur(Image img, int dx, int dy) { ///
       ImageSetPixel(img, x, y, media);
     }
   }
-  */
-
+  
+  /*
   //segunda implementação (versão otimizada)
   //criar um array para guardar o valor da soma dos pixeis
   int *tabela;
@@ -699,7 +699,11 @@ void ImageBlur(Image img, int dx, int dy) { ///
   //alocar memoria para o array
   tabela = (int*) malloc(sizeof(uint8*) * img->width * img->height);
 
-  
+  //verificar se a alocação falhou
+  if (!check(tabela != NULL, "Memory allocation failed")) {
+    free(tabela);
+    return;
+  }
 
   //ciclo para calcular a soma dos pixeis e guardar na tabela
   for (int x = 0; x < img->width; x++) {
@@ -745,5 +749,6 @@ void ImageBlur(Image img, int dx, int dy) { ///
       ImageSetPixel(img, x, y, value_blur);
     }
   }
+  */
 }
 
