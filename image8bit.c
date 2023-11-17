@@ -695,7 +695,7 @@ void ImageBlur(Image img, int dx, int dy) { ///
   //ciclo para calcular a soma dos pixeis
   for (int x = 0; x < img->width; x++) {
     for (int y = 0; y < img->height; y++) {
-      //declarar as variaveis para guardar os valores dos pixeis da matriz
+      //declarar variaveis para guardar os valores dos pixeis da matriz
       uint8 matriz_esq, matriz_cima, matriz_diagonal;
 
       if (x > 0) {
@@ -724,11 +724,38 @@ void ImageBlur(Image img, int dx, int dy) { ///
   //ciclo para aplicar o filtro
   for (int x = 0; x < img->width; x++) {
     for (int y = 0; y < img->height; y++) {
-      //calcular a soma dos pixeis
-      int sum_pixeis = tabela[G(img, x+dx, y+dy)] - tabela[G(img, x-dx-1, y+dy)] - tabela[G(img, x+dx, y-dy-1)] + tabela[G(img, x-dx-1, y-dy-1)];
-      //calcular a média dos pixeis
-      int media = (sum_pixeis + (2*dx+1)*(2*dy+1)/2) / ((2*dx+1)*(2*dy+1));
+      //declarar variaveis para guardar os valores da tabela
+      int value_esq, value_cima, value_diagonal;
+
+      //inicio e fim do filtro
+      int x_inicio = max(0, x-dx);
+      int x_fim = min(img->width-1, x+dx);
+      int y_inicio = max(0, y-dy);
+      int y_fim = min(img->height-1, y+dy);
+      int count_p = (x_fim - x_inicio + 1) * (y_fim - y_inicio + 1);
+
+      if (x_inicio > 0) {
+        value_esq = tabela[G(img, x_inicio-1, y_fim)];
+      }
+      else {
+        value_esq = 0;
+      }
+      if (y_inicio > 0) {
+        value_cima = tabela[G(img, x_fim, y_inicio-1)];
+      }
+      else {
+        value_cima = 0;
+      }
+      if (x_inicio > 0 && y_inicio > 0) {
+        value_diagonal = tabela[G(img, x_inicio-1, y_inicio-1)];
+      }
+      else {
+        value_diagonal = 0;
+      }
+
       //atribuir o valor da média ao pixel
+      int sum_pixeis = tabela[G(img, x_fim, y_fim)] - value_esq - value_cima + value_diagonal;
+      int media = (sum_pixeis + count_p/2) / count_p;
       ImageSetPixel(img, x, y, media);
     }
   }
