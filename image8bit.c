@@ -669,7 +669,7 @@ void ImageBlur(Image img, int dx, int dy) { ///
           //verificar se o pixel está dentro da imagem
           if (ImageValidPos(img, i, j)) {
             //somar o valor do pixel
-            sum_pixeis += ImageGetPixel(img, i, j);
+            sum_pixeis += ImageGetPixel(img_aux, i, j);
             count_p++;
           }
         }
