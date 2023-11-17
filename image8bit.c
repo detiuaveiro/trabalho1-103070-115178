@@ -682,7 +682,6 @@ void ImageBlur(Image img, int dx, int dy) { ///
     }
   }
   */
-
   
   //segunda implementação (versão otimizada)
   //criar um array para guardar o vaalor da soma dos pixeis
@@ -757,8 +756,8 @@ void ImageBlur(Image img, int dx, int dy) { ///
 
       //atribuir o valor da média ao pixel
       int sum_pixeis = tabela[G(img, x_fim, y_fim)] - value_esq - value_cima + value_diagonal;
-      int media = (sum_pixeis + count_p/2) / count_p;
-      ImageSetPixel(img, x, y, media);
+      sum_pixeis = (sum_pixeis + count_p/2) / count_p;
+      ImageSetPixel(img, x, y, sum_pixeis);
     }
   }
 }
