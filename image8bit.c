@@ -429,18 +429,22 @@ void ImageThreshold(Image img, uint8 thr) { ///
 /// darken the image if factor<1.0.
 void ImageBrighten(Image img, double factor) { ///
   assert (img != NULL);
-  // ? assert (factor >= 0.0);
   // Insert your code here!
   //ciclo para aplicar o brilho
-  for (int i = 0; i < img->width*img->height; i++) {
-    //multiplicar o pixel pelo fator mais uma constante para arredondar
-    img->pixel[i] *= factor + 0.5;
-    
-    if(img->pixel[i] > img->maxval)
-      //repor o valor do pixel para o maximo valor de cinzento
-      img->pixel[i] = img->maxval;
+  for (int i = 0; i < img->width; i++) {
+    for (int j = 0; j < img->height; j++) {
+      //multiplicar o pixel pelo fator mais uma constante para arredondar
+      uint8 level = (uint8)ImageGetPixel(img, i, j) * factor + 0.5;
+      //verificar se o pixel é maior que o maximo valor de cinzento
+      if (level > img->maxval) {
+        //repor o valor do pixel para o maximo valor de cinzento
+        level = img->maxval;
+      } 
+      ImageSetPixel(img, i, j, level);
+    }
   }
 }
+
 
 
 /// Geometric transformations
