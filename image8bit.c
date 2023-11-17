@@ -772,10 +772,10 @@ void ImageBlur(Image img, int dx, int dy) { ///
     }
     for (int x = 0; x < img->width; x++){
       for (int y = 0; y < img->height; y++){
-        xstart = max(x - dx, 0);
-        ystart = max(y - dy, 0);
-        xend = min(x + dx, img->width-1);
-        yend = min(y + dy, img->height-1);
+        xstart = MAX(x - dx, 0);
+        ystart = MAX(y - dy, 0);
+        xend = MIN(x + dx, img->width-1);
+        yend = MIN(y + dy, img->height-1);
         xlen = xend - xstart + 1;
         ylen = yend - ystart + 1;
         count = ylen * xlen;
