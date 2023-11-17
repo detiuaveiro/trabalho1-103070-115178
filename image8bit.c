@@ -699,11 +699,7 @@ void ImageBlur(Image img, int dx, int dy) { ///
   //alocar memoria para o array
   tabela = (int*) malloc(sizeof(uint8*) * img->width * img->height);
 
-  //verificar se a alocação falhou
-  if (!check(tabela != NULL, "Memory allocation failed")) {
-    free(tabela);
-    return;
-  }
+  
 
   //ciclo para calcular a soma dos pixeis e guardar na tabela
   for (int x = 0; x < img->width; x++) {
