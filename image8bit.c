@@ -685,7 +685,7 @@ void ImageBlur(Image img, int dx, int dy) { ///
   
   //segunda implementação (versão otimizada)
   //criar um array para guardar o vaalor da soma dos pixeis
-  int* tabela = (int*)malloc(sizeof(int) * img->width * img->height);
+  int *tabela = (int*)malloc(sizeof(uint8) * img->width * img->height);
 
   //verificar se a alocação falhou
   if (!check(tabela != NULL, "Memory allocation failed")) {
@@ -693,12 +693,18 @@ void ImageBlur(Image img, int dx, int dy) { ///
     return;
   }
 
+  //declarar variaveis para guardar os valores dos pixeis da matriz
+  uint8 matriz_esq = 0, matriz_cima = 0, matriz_diagonal = 0;
+
+  //declarar variaveis para guardar os valores da tabela
+  int value_esq = 0, value_cima = 0, value_diagonal = 0;
+
+  //declarar variaveis para inicio e fim do filtro, para numero de pixeis e para o valor do blur
+  int x_inicio, x_fim, y_inicio, y_fim, count_p, value_blur;
+
   //ciclo para calcular a soma dos pixeis
   for (int x = 0; x < img->width; x++) {
     for (int y = 0; y < img->height; y++) {
-      //declarar variaveis para guardar os valores dos pixeis da matriz
-      uint8 matriz_esq = 0, matriz_cima = 0, matriz_diagonal = 0;
-
       if (x > 0) {
         matriz_esq = ImageGetPixel(img, x-1, y);
       } 
@@ -717,15 +723,12 @@ void ImageBlur(Image img, int dx, int dy) { ///
   //ciclo para aplicar o filtro
   for (int x = 0; x < img->width; x++) {
     for (int y = 0; y < img->height; y++) {
-      //declarar variaveis para guardar os valores da tabela
-      int value_esq = 0, value_cima = 0, value_diagonal = 0;
-
       //inicio e fim do filtro
-      int x_inicio = MAX(0, x-dx);
-      int x_fim = MIN(img->width-1, x+dx);
-      int y_inicio = MAX(0, y-dy);
-      int y_fim = MIN(img->height-1, y+dy);
-      int count_p = (x_fim - x_inicio + 1) * (y_fim - y_inicio + 1);
+      x_inicio = MAX(0, x-dx);
+      x_fim = MIN(img->width-1, x+dx);
+      y_inicio = MAX(0, y-dy);
+      y_fim = MIN(img->height-1, y+dy);
+      count_p = (x_fim - x_inicio + 1) * (y_fim - y_inicio + 1);
 
       if (x_inicio > 0) {
         value_esq = tabela[G(img, x_inicio-1, y_fim)];
@@ -737,10 +740,10 @@ void ImageBlur(Image img, int dx, int dy) { ///
         value_diagonal = tabela[G(img, x_inicio-1, y_inicio-1)];
       }
 
-      //atribuir o valor da média ao pixel
-      int sum_pixeis = tabela[G(img, x_fim, y_fim)] - value_esq - value_cima + value_diagonal;
-      int media = (sum_pixeis + count_p/2) / count_p;
-      ImageSetPixel(img, x, y, media);
+      //atribuir o valor do blur ao pixel
+      value_blur = tabela[G(img, x_fim, y_fim)] - value_esq - value_cima + value_diagonal;
+      value_blur = (value_blur + count_p/2) / count_p;
+      ImageSetPixel(img, x, y, value_blur);
     }
   }
 }
