@@ -697,7 +697,7 @@ void ImageBlur(Image img, int dx, int dy) { ///
   int x_inicio, x_fim, y_inicio, y_fim, count_p, value_blur;
 
   //alocar memoria para o array
-  tabela = (int*)malloc(sizeof(uint8*) * img->width * img->height);
+  tabela = (int*) malloc(sizeof(uint8*) * img->width * img->height);
 
   //verificar se a alocação falhou
   if (!check(tabela != NULL, "Memory allocation failed")) {
@@ -705,17 +705,17 @@ void ImageBlur(Image img, int dx, int dy) { ///
     return;
   }
 
-  //ciclo para calcular a soma dos pixeis
+  //ciclo para calcular a soma dos pixeis e guardar na tabela
   for (int x = 0; x < img->width; x++) {
     for (int y = 0; y < img->height; y++) {
+      if (x > 0 && y > 0) {
+        matriz_diagonal = tabela[G(img, x-1, y-1)];
+      } 
       if (x > 0) {
         matriz_esq = tabela[G(img, x-1, y)];
       } 
       if (y > 0) {
         matriz_cima = tabela[G(img, x, y-1)];
-      } 
-      if (x > 0 && y > 0) {
-        matriz_diagonal = tabela[G(img, x-1, y-1)];
       } 
     
       //calcular a soma dos pixeis
@@ -733,14 +733,14 @@ void ImageBlur(Image img, int dx, int dy) { ///
       y_fim = MIN(img->height-1, y+dy);
       count_p = (x_fim - x_inicio + 1) * (y_fim - y_inicio + 1);
 
+      if (x_inicio > 0 && y_inicio > 0) {
+        value_diagonal = tabela[G(img, x_inicio-1, y_inicio-1)];
+      }
       if (x_inicio > 0) {
         value_esq = tabela[G(img, x_inicio-1, y_fim)];
       }
       if (y_inicio > 0) {
         value_cima = tabela[G(img, x_fim, y_inicio-1)];
-      }
-      if (x_inicio > 0 && y_inicio > 0) {
-        value_diagonal = tabela[G(img, x_inicio-1, y_inicio-1)];
       }
 
       //atribuir o valor do blur ao pixel
