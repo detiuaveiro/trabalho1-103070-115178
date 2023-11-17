@@ -682,6 +682,7 @@ void ImageBlur(Image img, int dx, int dy) { ///
   }
   */
 
+  
   //segunda implementação (versão otimizada)
   //criar um array para guardar o vaalor da soma dos pixeis
   int* tabela = (int*)malloc(sizeof(int) * img->width * img->height);
