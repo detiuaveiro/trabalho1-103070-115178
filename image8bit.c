@@ -153,7 +153,8 @@ void ImageInit(void) { ///
 // Macros to simplify accessing instrumentation counters:
 #define PIXMEM InstrCount[0]
 // Add more macros here...
-
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 // TIP: Search for PIXMEM or InstrCount to see where it is incremented!
 
 
@@ -729,10 +730,10 @@ void ImageBlur(Image img, int dx, int dy) { ///
       int value_esq, value_cima, value_diagonal;
 
       //inicio e fim do filtro
-      int x_inicio = max(0, x-dx);
-      int x_fim = min(img->width-1, x+dx);
-      int y_inicio = max(0, y-dy);
-      int y_fim = min(img->height-1, y+dy);
+      int x_inicio = MAX(0, x-dx);
+      int x_fim = MIN(img->width-1, x+dx);
+      int y_inicio = MAX(0, y-dy);
+      int y_fim = MIN(img->height-1, y+dy);
       int count_p = (x_fim - x_inicio + 1) * (y_fim - y_inicio + 1);
 
       if (x_inicio > 0) {
