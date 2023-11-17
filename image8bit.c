@@ -440,6 +440,7 @@ void ImageBrighten(Image img, double factor) { ///
         //repor o valor do pixel para o maximo valor de cinzento
         level = img->maxval;
       } 
+      //atribuir o novo valor ao pixel
       ImageSetPixel(img, i, j, level);
     }
   }
