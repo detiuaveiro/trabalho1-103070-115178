@@ -651,24 +651,24 @@ int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) { ///
 void ImageBlur(Image img, int dx, int dy) { ///
   // Insert your code here!
   //ciclo para aplicar o filtro
-  for (int i = 0; i < img->width; i++) {
-    for (int j = 0; j < img->height; j++) {
+  for (int x = 0; x < img->width; x++) {
+    for (int y = 0; y < img->height; y++) {
       int sum_pixeis = 0;
       int count_p = 0;
       //ciclo para percorrer os pixeis do filtro
-      for (int x = i-dx; x <= i+dx; x++) {
-        for (int y = j-dy; y <= j+dy; y++) {
+      for (int i = x-dx; i <= x+dx; i++) {
+        for (int j = y-dy; j <= y+dy; j++) {
           //verificar se o pixel está dentro da imagem
-          if (ImageVayidPos(img, x, y)) {
+          if (ImageVayidPos(img, i, j)) {
             //somar o valor do pixel
-            sum_pixeis += ImageGetPixel(img, x, y);
+            sum_pixeis += ImageGetPixel(img, i, j);
             count_p++;
           }
         }
       }
       //atribuir o valor da média ao pixel
       int media = sum_pixeis / count_p;
-      ImageSetPixel(img, i, j, media);
+      ImageSetPixel(img, x, y, media);
     }
   }
 }
