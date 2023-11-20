@@ -708,18 +708,19 @@ void ImageBlur(Image img, int dx, int dy) { ///
   //ciclo para calcular a soma dos pixeis e guardar na tabela
   for (int x = 0; x < img->width; x++) {
     for (int y = 0; y < img->height; y++) {
+      //guardar o valor do pixel no array
+      tabela[G(img, x, y)] = ImageGetPixel(img, x, y);
+
+      //calcular a soma dos pixeis da matriz
       if (x > 0 && y > 0) {
-        matriz_diagonal = tabela[G(img, x-1, y-1)];
+        tabela[G(img, x, y)] -= tabela[G(img, x-1, y-1)];
       } 
       if (x > 0) {
-        matriz_esq = tabela[G(img, x-1, y)];
+        tabela[G(img, x, y)] += tabela[G(img, x-1, y)];
       } 
       if (y > 0) {
-        matriz_cima = tabela[G(img, x, y-1)];
+        tabela[G(img, x, y)] += tabela[G(img, x, y-1)];
       } 
-    
-      //calcular a soma dos pixeis
-      tabela[G(img, x, y)] = ImageGetPixel(img, x, y) + matriz_esq + matriz_cima - matriz_diagonal;
     }
   }
 
@@ -733,18 +734,21 @@ void ImageBlur(Image img, int dx, int dy) { ///
       y_fim = MIN(y+dy, img->height-1);
       count_p = (x_fim - x_inicio + 1) * (y_fim - y_inicio + 1);
 
+      //inicializar o blur com o valor guardado no array
+      value_blur = tabela[G(img, x_fim, y_fim)];
+      
+      //calcular o blur
       if (x_inicio > 0 && y_inicio > 0) {
-        value_diagonal = tabela[G(img, x_inicio-1, y_inicio-1)];
+        value_blur += tabela[G(img, x_inicio-1, y_inicio-1)];
       }
       if (x_inicio > 0) {
-        value_esq = tabela[G(img, x_inicio-1, y_fim)];
+        value_blur -= tabela[G(img, x_inicio-1, y_fim)];
       }
       if (y_inicio > 0) {
-        value_cima = tabela[G(img, x_fim, y_inicio-1)];
+        value_blur -= tabela[G(img, x_fim, y_inicio-1)];
       }
 
       //atribuir o valor do blur ao pixel
-      value_blur = tabela[G(img, x_fim, y_fim)] - value_esq - value_cima + value_diagonal;
       value_blur = (value_blur + count_p/2) / count_p;
       ImageSetPixel(img, x, y, value_blur);
     }
