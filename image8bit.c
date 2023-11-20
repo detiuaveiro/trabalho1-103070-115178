@@ -435,7 +435,7 @@ void ImageBrighten(Image img, double factor) { ///
   for (int i = 0; i < img->width; i++) {
     for (int j = 0; j < img->height; j++) {
       //multiplicar o pixel pelo fator mais uma constante para arredondar
-      uint8 level = (uint8)ImageGetPixel(img, i, j) * factor + 0.5;
+      uint8 level = (uint8)(ImageGetPixel(img, i, j) * factor + 0.5);
       //verificar se o pixel é maior que o maximo valor de cinzento
       if (level > img->maxval) {
         //repor o valor do pixel para o maximo valor de cinzento
