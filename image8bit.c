@@ -365,6 +365,8 @@ static inline int G(Image img, int x, int y) {
   // Insert your code here!
   //calcular o indice do pixel
   index = y * img->width + x;
+  //contador de acessos ao pixel
+  PIXMEM++;  
   assert (0 <= index && index < img->width*img->height);
   return index;
 }
