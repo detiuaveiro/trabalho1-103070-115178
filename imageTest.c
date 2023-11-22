@@ -119,20 +119,15 @@ int main(int argc, char* argv[]) {
     //criar uma imagem branca com o pixel ultimo pixel preto
     Image branca = ImageCrop(img1, 0, 0, ImageWidth(img1), ImageHeight(img1));
     ImageThreshold(branca, 0);
-    int width_ultimo_pixel = ImageWidth(branca)-1;
-    int height_ultimo_pixel = ImageHeight(branca)-1;
-    ImageSetPixel(branca, width_ultimo_pixel, height_ultimo_pixel, 0);
-    ImageSave(branca, "branca.pgm");
 
     //ciclo para criar varias janelas e testar a função
     for (int width = 1; width < ImageWidth(branca); width*=2) {
       //criar uma janela para o melhor cenário
       Image subBest = ImageCrop(branca, 0, 0, width, width);
-      ImageSave(subBest, "best.pgm");
+
       //criar uma janela para o pior cenário
       Image subWorst = ImageCrop(branca, 0, 0, width, width);
       ImageSetPixel(subWorst, ImageWidth(subWorst)-1, ImageHeight(subWorst)-1, 0);
-      ImageSave(subWorst, "worst.pgm");
 
       InstrReset(); // to reset instrumentation
       printf("\n# IMAGELOCATESUBIMAGE BEST CASE (size: %d)\n", width);
