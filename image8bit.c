@@ -146,6 +146,7 @@ static int check(int condition, const char* failmsg) {
 void ImageInit(void) { ///
   InstrCalibrate();
   InstrName[0] = "pixmem";  // InstrCount[0] will count pixel array acesses
+  InstrName[1] = "pcomp";
   // Name other counters here...
   
 }
@@ -153,8 +154,10 @@ void ImageInit(void) { ///
 // Macros to simplify accessing instrumentation counters:
 #define PIXMEM InstrCount[0]
 // Add more macros here...
+#define PCOMP InstrCount[1]
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
+#define NDEBUG 1
 // TIP: Search for PIXMEM or InstrCount to see where it is incremented!
 
 
@@ -347,7 +350,7 @@ int ImageValidRect(Image img, int x, int y, int w, int h) { ///
   assert (img != NULL);
   // Insert your code here!
   //verificar se os vertices do retangulo estão dentro da imagem
-  return ImageValidPos(img, x, y) && ImageValidPos(img, x+w, y) && ImageValidPos(img, x+w, y+h) && ImageValidPos(img, x, y+h);  
+  return ImageValidPos(img, x, y) && ImageValidPos(img, x+w-1, y) && ImageValidPos(img, x+w-1, y+h-1) && ImageValidPos(img, x, y+h-1);  
 }
 
 /// Pixel get & set operations
@@ -365,8 +368,6 @@ static inline int G(Image img, int x, int y) {
   // Insert your code here!
   //calcular o indice do pixel
   index = y * img->width + x;
-  //contador de acessos ao pixel
-  PIXMEM++;  
   assert (0 <= index && index < img->width*img->height);
   return index;
 }
@@ -616,6 +617,8 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
   //ciclo para comparar as imagens
   for (int i = 0; i < img2->width; i++) {
     for (int j = 0; j < img2->height; j++) {
+      //incrementar o contador de comparações
+      PCOMP++;
       //verificar se os pixeis são diferentes
       if (ImageGetPixel(img1, x + i, y + j) != ImageGetPixel(img2, i, j)) {
         return 0;
@@ -744,6 +747,8 @@ void ImageBlurOld(Image img, int dx, int dy) {
       //ciclo para percorrer os pixeis do filtro
       for (int i = x-dx; i <= x+dx; i++) {
         for (int j = y-dy; j <= y+dy; j++) {
+          //incrementar o contador de comparações
+          PCOMP++;
           //verificar se o pixel está dentro da imagem
           if (ImageValidPos(img, i, j)) {
             //somar o valor do pixel
