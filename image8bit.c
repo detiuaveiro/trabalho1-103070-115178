@@ -15,7 +15,7 @@
 // 115178 Roberto Fontoura
 // 
 // Date:
-//
+// 22/11/2023
 
 #include "image8bit.h"
 
