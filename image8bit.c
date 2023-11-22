@@ -658,33 +658,6 @@ int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) { ///
 /// The image is changed in-place.
 void ImageBlur(Image img, int dx, int dy) { ///
   // Insert your code here!
-  /* Primeira implementação (versão não otimizada)
-  //criar uma imagem auxiliar para não alterar a imagem original
-  Image img_aux = ImageCreate(img->width+1, img->height+1, img->maxval);
-  ImagePaste(img_aux,0, 0, img);
-  //ciclo para aplicar o filtro
-  for (int x = 0; x < img->width; x++) {
-    for (int y = 0; y < img->height; y++) {
-      int sum_pixeis = 0;
-      int count_p = 0;
-      //ciclo para percorrer os pixeis do filtro
-      for (int i = x-dx; i <= x+dx; i++) {
-        for (int j = y-dy; j <= y+dy; j++) {
-          //verificar se o pixel está dentro da imagem
-          if (ImageValidPos(img, i, j)) {
-            //somar o valor do pixel
-            sum_pixeis += ImageGetPixel(img_aux, i, j);
-            count_p++;
-          }
-        }
-      }
-      //atribuir o valor da média ao pixel
-      int media = (sum_pixeis + count_p/2) / count_p;
-      ImageSetPixel(img, x, y, media);
-    }
-  }
-  */
-  
   //segunda implementação (versão otimizada)
   //criar um array para guardar o valor da soma dos pixeis
   int *tabela;
@@ -753,6 +726,35 @@ void ImageBlur(Image img, int dx, int dy) { ///
       //atribuir o valor do blur ao pixel
       value_blur = (value_blur + count_p/2) / count_p;
       ImageSetPixel(img, x, y, value_blur);
+    }
+  }
+}
+
+
+void ImageBlurOld(Image img, int dx, int dy) {
+  //Primeira implementação (versão não otimizada)
+  //criar uma imagem auxiliar para não alterar a imagem original
+  Image img_aux = ImageCreate(img->width+1, img->height+1, img->maxval);
+  ImagePaste(img_aux,0, 0, img);
+  //ciclo para aplicar o filtro
+  for (int x = 0; x < img->width; x++) {
+    for (int y = 0; y < img->height; y++) {
+      int sum_pixeis = 0;
+      int count_p = 0;
+      //ciclo para percorrer os pixeis do filtro
+      for (int i = x-dx; i <= x+dx; i++) {
+        for (int j = y-dy; j <= y+dy; j++) {
+          //verificar se o pixel está dentro da imagem
+          if (ImageValidPos(img, i, j)) {
+            //somar o valor do pixel
+            sum_pixeis += ImageGetPixel(img_aux, i, j);
+            count_p++;
+          }
+        }
+      }
+      //atribuir o valor da média ao pixel
+      int media = (sum_pixeis + count_p/2) / count_p;
+      ImageSetPixel(img, x, y, media);
     }
   }
 }
