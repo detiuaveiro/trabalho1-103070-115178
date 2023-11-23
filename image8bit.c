@@ -663,6 +663,8 @@ void ImageBlur(Image img, int dx, int dy) { ///
   // Insert your code here!
   //segunda implementação (versão otimizada)
   //criar um array para guardar o valor da soma dos pixeis
+  //assim não é necessário estar sempre a repetir a soma dos pixeis da imagem
+  //cada posição do array corresponde à soma do pixel correspondente a essa posição na imagem mais os que estão para trás
   int *tabela;
 
   //declarar variaveis para guardar os valores dos pixeis da matriz

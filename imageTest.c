@@ -52,7 +52,7 @@ int main(int argc, char* argv[]) {
     InstrPrint(); // to print instrumentation
 
     Image cp1 = ImageCrop(img1, 0, 0, ImageWidth(img1), ImageHeight(img1));
-
+    
     printf("\n===============================================================");
     //testar a função blur não otimizada
     printf("\n# Teste da função Blur não otimizada\n");
@@ -62,23 +62,31 @@ int main(int argc, char* argv[]) {
     ImageBlurOld(cp1, 7, 7);
     InstrPrint();
 
+    cp1 = ImageCrop(img1, 0, 0, ImageWidth(img1), ImageHeight(img1));
+
     InstrReset(); // to reset instrumentation
     printf("\n# BLUR_Old image (size: %d - window 14x14)\n", pix);
     ImageBlurOld(cp1, 14, 14);
     InstrPrint();
+
+    cp1 = ImageCrop(img1, 0, 0, ImageWidth(img1), ImageHeight(img1));
 
     InstrReset(); // to reset instrumentation
     printf("\n# BLUR_Old image (size: %d - window 30x30)\n", pix);
     ImageBlurOld(cp1, 30, 30);
     InstrPrint();
 
+    cp1 = ImageCrop(img1, 0, 0, ImageWidth(img1), ImageHeight(img1));
+
     InstrReset(); // to reset instrumentation
     printf("\n# BLUR_Old image (size: %d - window 50x50)\n", pix);
     ImageBlurOld(cp1, 50, 50);
     InstrPrint();
 
+    cp1 = ImageCrop(img1, 0, 0, ImageWidth(img1), ImageHeight(img1));
+
     InstrReset(); // to reset instrumentation
-    printf("\n# NORMAL BLUR_Old image (size: %d - window 100x100)\n", pix);
+    printf("\n# BLUR_Old image (size: %d - window 100x100)\n", pix);
     ImageBlurOld(cp1, 100, 100);
     InstrPrint();
 
@@ -86,31 +94,41 @@ int main(int argc, char* argv[]) {
     //testar a função blur otimizada
     printf("\n# Teste da função Blur otimizada\n");
 
+    cp1 = ImageCrop(img1, 0, 0, ImageWidth(img1), ImageHeight(img1));
+
     InstrReset(); // to reset instrumentation
     printf("\n# BLUR_otimizado image (size: %d - window 7x7)\n", pix);
     ImageBlur(cp1, 7, 7);
     InstrPrint();
+
+    cp1 = ImageCrop(img1, 0, 0, ImageWidth(img1), ImageHeight(img1));
 
     InstrReset(); // to reset instrumentation
     printf("\n# BLUR_otimizado image (size: %d - window 14x14)\n", pix);
     ImageBlur(cp1, 14, 14);
     InstrPrint();
 
+    cp1 = ImageCrop(img1, 0, 0, ImageWidth(img1), ImageHeight(img1));
+
     InstrReset(); // to reset instrumentation
     printf("\n# BLUR_otimizado image (size: %d - window 30x30)\n", pix);
     ImageBlur(cp1, 30, 30);
     InstrPrint();
+
+    cp1 = ImageCrop(img1, 0, 0, ImageWidth(img1), ImageHeight(img1));
 
     InstrReset(); // to reset instrumentation
     printf("\n# BLUR_otimizado image (size: %d - window 50x50)\n", pix);
     ImageBlur(cp1, 50, 50);
     InstrPrint();
 
+    cp1 = ImageCrop(img1, 0, 0, ImageWidth(img1), ImageHeight(img1));
+
     InstrReset(); // to reset instrumentation
     printf("\n# BLUR_otimizado image (size: %d - window 100x100)\n", pix);
     ImageBlur(cp1, 100, 100);
     InstrPrint();
-
+    
     printf("\n===============================================================\n");
 
     //testar a função ImageLocateSubImage
@@ -140,11 +158,20 @@ int main(int argc, char* argv[]) {
       InstrPrint();
 
       printf("\n");
+
+      //destruir as imagens
+      ImageDestroy(&subBest);
+      ImageDestroy(&subWorst);
     }
+    
+    //destruir as imagens
+    ImageDestroy(&img1);
+    ImageDestroy(&cp1);
+    ImageDestroy(&branca);
   }
 
   printf("===============================================================\n");
-
+  
   /*
   //img2 = ImageCrop(img1, ImageWidth(img1)/4, ImageHeight(img1)/4, ImageWidth(img1)/2, ImageHeight(img1)/2);
   Image img2 = ImageRotate(img1);
