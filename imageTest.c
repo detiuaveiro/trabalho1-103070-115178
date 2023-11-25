@@ -54,6 +54,7 @@ int main(int argc, char* argv[]) {
     Image cp1 = ImageCrop(img1, 0, 0, ImageWidth(img1), ImageHeight(img1));
     
     printf("\n===============================================================");
+    /*
     //testar a função blur não otimizada
     printf("\n# Teste da função Blur não otimizada\n");
 
@@ -84,6 +85,7 @@ int main(int argc, char* argv[]) {
     InstrPrint();
 
     printf("\n===============================================================");
+    */
     //testar a função blur otimizada
     printf("\n# Teste da função Blur otimizada\n");
 
