@@ -147,6 +147,7 @@ void ImageInit(void) { ///
   InstrCalibrate();
   InstrName[0] = "pixmem";  // InstrCount[0] will count pixel array acesses
   InstrName[1] = "pcomp";
+  InstrName[2] = "itr";
   // Name other counters here...
   
 }
@@ -158,6 +159,7 @@ void ImageInit(void) { ///
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 #define NDEBUG 1
+#define ITR InstrCount[2]
 // TIP: Search for PIXMEM or InstrCount to see where it is incremented!
 
 
@@ -176,7 +178,7 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
   assert (height >= 0);
   assert (0 < maxval && maxval <= PixMax);
   // Insert your code here!
-  Image img = (Image*)malloc(sizeof(Image));
+  Image img = malloc(sizeof(struct image));
 
   //verificar se a alocação falhou
   if (!check(img != NULL, "Memory allocation failed")) {
@@ -617,8 +619,9 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
   //ciclo para comparar as imagens
   for (int i = 0; i < img2->width; i++) {
     for (int j = 0; j < img2->height; j++) {
-      //incrementar o contador de comparações
+      //incrementar o contador de comparações e de iterações
       PCOMP++;
+      ITR++;
       //verificar se os pixeis são diferentes
       if (ImageGetPixel(img1, x + i, y + j) != ImageGetPixel(img2, i, j)) {
         return 0;
@@ -667,12 +670,6 @@ void ImageBlur(Image img, int dx, int dy) { ///
   //cada posição do array corresponde à soma do pixel correspondente a essa posição na imagem mais os que estão para trás
   int *tabela;
 
-  //declarar variaveis para guardar os valores dos pixeis da matriz
-  int matriz_esq = 0, matriz_cima = 0, matriz_diagonal = 0;
-
-  //declarar variaveis para guardar os valores da tabela
-  int value_esq = 0, value_cima = 0, value_diagonal = 0;
-
   //declarar variaveis para inicio e fim do filtro, para numero de pixeis e para o valor do blur
   int x_inicio, x_fim, y_inicio, y_fim, count_p, value_blur;
 
@@ -688,6 +685,9 @@ void ImageBlur(Image img, int dx, int dy) { ///
   //ciclo para calcular a soma dos pixeis e guardar na tabela
   for (int x = 0; x < img->width; x++) {
     for (int y = 0; y < img->height; y++) {
+      //incrementar o contador de iterações
+      ITR++;
+
       //guardar o valor do pixel no array
       tabela[G(img, x, y)] = ImageGetPixel(img, x, y);
 
@@ -707,6 +707,9 @@ void ImageBlur(Image img, int dx, int dy) { ///
   //ciclo para aplicar o filtro
   for (int x = 0; x < img->width; x++) {
     for (int y = 0; y < img->height; y++) {
+      //incrementar o contador de iterações
+      ITR++;
+
       //inicio e fim do filtro
       x_inicio = MAX(x-dx,0);
       x_fim = MIN(x+dx, img->width-1);
@@ -735,7 +738,7 @@ void ImageBlur(Image img, int dx, int dy) { ///
   }
 }
 
-
+/*
 void ImageBlurOld(Image img, int dx, int dy) {
   //Primeira implementação (versão não otimizada)
   //criar uma imagem auxiliar para não alterar a imagem original
@@ -749,8 +752,9 @@ void ImageBlurOld(Image img, int dx, int dy) {
       //ciclo para percorrer os pixeis do filtro
       for (int i = x-dx; i <= x+dx; i++) {
         for (int j = y-dy; j <= y+dy; j++) {
-          //incrementar o contador de comparações
+          //incrementar o contador de comparações e de iterações
           PCOMP++;
+          ITR++;
           //verificar se o pixel está dentro da imagem
           if (ImageValidPos(img, i, j)) {
             //somar o valor do pixel
@@ -765,4 +769,5 @@ void ImageBlurOld(Image img, int dx, int dy) {
     }
   }
 }
+*/
 
