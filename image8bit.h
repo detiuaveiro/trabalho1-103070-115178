@@ -213,7 +213,4 @@ int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) ;
 /// The image is changed in-place.
 void ImageBlur(Image img, int dx, int dy) ;
 
-/// Old blur function.
-void ImageBlurOld(Image img, int dx, int dy) ;
-
 #endif
